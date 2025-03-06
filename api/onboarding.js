@@ -19,10 +19,10 @@ router.post('/:token', upload.single('profilePic'), async (req, res) => {
   const { github, linkedin, website, twitter, instagram, youtube } =
     JSON.parse(social);
 
-  // const verificationToken = crypto
-  //   .createHash('sha256')
-  //   .update(token)
-  //   .digest('hex');
+  const verificationToken = crypto
+    .createHash('sha256')
+    .update(token)
+    .digest('hex');
 
   try {
     // Find user with specific verification token

@@ -43,12 +43,15 @@ const PostPage = ({ user }) => {
 
   const queryClient = useQueryClient();
 
-  const { data } = useQuery(['posts', id], () => getPost(id));
+  // const { data } = useQuery(['posts', id], () => getPost(id));
+  const { data = {} } = useQuery(['posts', id], () => getPost(id));
 
-  const { data: comments } = useQuery(['comments', id], async () => {
+
+  const { data: comments = [] } = useQuery(['comments', id], async () => {
     const { data } = await axios.get(`${baseURL}/api/comments/${id}`);
-    return data;
+    return data || [];
   });
+  
 
   const mutation = useMutation(async () => {
     await axios.delete(`${baseURL}/api/posts/${id}`, {
@@ -113,8 +116,11 @@ const PostPage = ({ user }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    document.title = data && `${data.title} on Devin`;
+    if (data?.title) {
+      document.title = `${data.title} on Devin`;
+    }
   }, [data]);
+  
 
   if (!data) {
     return <NotFound />;
@@ -141,11 +147,11 @@ const PostPage = ({ user }) => {
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.description) }}
             ></div>
             <div className="mt-6">
-              <h1 className="mb-4 text-lg text-purple-900 font-semibold">
-                Comments ({comments.length})
-              </h1>
+            <h1 className="mb-4 text-lg text-purple-900 font-semibold">
+            Comments ({comments ? comments.length : 0})
+            </h1>
               {user && <NewComment queryClient={queryClient} id={data._id} />}
-              {comments.map((comment) => (
+              {/* {comments.map((comment) => (
                 <Comment
                   key={comment._id}
                   comment={comment}
@@ -153,7 +159,21 @@ const PostPage = ({ user }) => {
                   user={user}
                   queryClient={queryClient}
                 />
-              ))}
+              ))} */}
+              {comments && comments.length > 0 ? (
+                 comments.map((comment) => (
+                  <Comment
+                    key={comment._id}
+                    comment={comment}
+                    postId={data._id}
+                    user={user}
+                    queryClient={queryClient}
+                    />
+                  ))
+                ) : (
+                  <p className="text-gray-500">No comments yet.</p>
+                )}
+
             </div>
           </div>
           <div className="w-100 md:w-1/3 lg:w-1/4 w-full">
@@ -161,18 +181,19 @@ const PostPage = ({ user }) => {
               Post Details
             </h3>
             <div className="grid grid-col-1 mt-4 space-y-2">
-              <PostDetailsItem
-                Icon={ClockIcon}
-                detail={format(
-                  new Date(data.createdAt),
-                  'do MMM yyyy, hh:mm a'
-                )}
-              />
+            <PostDetailsItem
+              Icon={ClockIcon}
+              detail={
+                data?.createdAt
+                  ? format(new Date(data.createdAt), 'do MMM yyyy, hh:mm a')
+                  : 'Unknown date'
+              }
+            />
               <div className="flex flex-wrap items-center border-b py-1">
                 <div className="w-5 mr-2">
                   <TagIcon className="h-5 w-5 text-purple-900" />
                 </div>
-                <div className="flex-1 flex flex-wrap gap-2">
+                {/* <div className="flex-1 flex flex-wrap gap-2">
                   {data.techStack.map((tag, index) => (
                     <Link key={index} href={`/posts/tag/${tag}`}
                        className="bg-gray-100 hover:bg-purple-900 hover:text-white transition text-gray-800 text-sm font-semibold rounded-md px-2 py-1">
@@ -180,7 +201,20 @@ const PostPage = ({ user }) => {
                       
                     </Link>
                   ))}
-                </div>
+                </div> */}
+
+                {data && data.techStack && data.techStack.length > 0 && (
+                  <div className="flex-1 flex flex-wrap gap-2">
+                    {data.techStack.map((tag, index) => (
+                      <Link key={index} href={`/posts/tag/${tag}`} legacyBehavior>
+                        <span>className="bg-gray-100 hover:bg-purple-900 hover:text-white transition text-gray-800 text-sm font-semibold rounded-md px-2 py-1"</span> 
+                          {tag}
+                        
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
               </div>
               <PostDetailsLink Icon={GlobeAltIcon} detail={data.liveDemo} />
               {data.sourceCode && (
@@ -188,7 +222,8 @@ const PostPage = ({ user }) => {
               )}
               <PostDetailsItem
                 Icon={HeartIcon}
-                detail={`${data.likes.length} likes`}
+                detail={`${(data?.likes || []).length} likes`}
+
                 isLikes
                 open={modalOpen}
                 setOpen={setModalOpen}

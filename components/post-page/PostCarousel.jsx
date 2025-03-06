@@ -46,7 +46,7 @@ const PostCarousel = ({ images, title }) => {
 
   return (
     <Slider {...settings}>
-      {images.map((image) => (
+      {(images || []).map((image) => (
         <div key={image} className="group">
           <img className="rounded-lg w-full h-auto" src={image} alt={title} />
         </div>

@@ -19,7 +19,9 @@ const PostHead = ({ post }) => {
         property="og:description"
         content="Discover creative websites and developers across the globe."
       />
-      <meta property="og:image" content={post.images[0]} />
+      {/* <meta property="og:image" content={post.images[0]} /> */}
+      <meta property="og:image" content={post?.images?.[0] || '/default-image.jpg'} />
+
 
       <meta property="twitter:card" content="summary_large_image" />
       <meta
@@ -34,7 +36,9 @@ const PostHead = ({ post }) => {
         property="twitter:description"
         content="Discover creative websites and developers across the globe."
       />
-      <meta property="twitter:image" content={post.images[0]} />
+      {/* <meta property="twitter:image" content={post.images[0]} /> */}
+      <meta property="twitter:image" content={post?.images?.[0] || '/default-image.jpg'} />
+
     </Head>
   );
 };

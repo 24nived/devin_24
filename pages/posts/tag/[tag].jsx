@@ -34,7 +34,7 @@ const TagPage = ({ user }) => {
           Found {data.pages[0].total} posts with{' '}
           <span className="text-purple-900">{tag}</span> tag
         </h1>
-        <InfiniteScroll
+        {/* <InfiniteScroll
           hasMore={hasNextPage}
           loadMore={fetchNextPage}
           className="container mx-auto grid gap-x-5 gap-y-7 place-items-center grid-cols-auto-fill"
@@ -46,7 +46,21 @@ const TagPage = ({ user }) => {
               ))}
             </Fragment>
           ))}
-        </InfiniteScroll>
+        </InfiniteScroll> */}
+              <InfiniteScroll
+        hasMore={hasNextPage}
+        loadMore={fetchNextPage}
+        className="container mx-auto grid gap-x-5 gap-y-7 place-items-center grid-cols-auto-fill"
+      >
+        {data.pages.map((page, i) => (
+          <div key={i}> {/* Wrapped with a div instead of Fragment */}
+            {page.posts.map((post) => (
+              <PostCard user={user} key={post._id} post={post} />
+            ))}
+          </div>
+        ))}
+      </InfiniteScroll>
+
         {isFetchingNextPage && (
           <div className="py-8">
             <AiOutlineLoading3Quarters className="h-8 w-8 animate-spin mx-auto text-purple-900" />
@@ -82,3 +96,4 @@ export async function getServerSideProps(ctx) {
 }
 
 export default TagPage;
+

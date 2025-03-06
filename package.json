@@ -48,6 +48,7 @@
     "webpack": "^5.97.1"
   },
   "devDependencies": {
+    "@types/node": "^22.13.9",
     "autoprefixer": "^10.2.6",
     "postcss": "^8.3.5",
     "tailwindcss": "^2.2.4"

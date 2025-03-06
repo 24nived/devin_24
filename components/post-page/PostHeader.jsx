@@ -13,34 +13,41 @@ import DeleteModal from '../../components/post-page/DeleteModal';
 const PostHeader = ({ post, user, deletePost, likePost, savePost }) => {
   const [open, setOpen] = useState(false);
 
-  const isLiked =
-    user && post.likes.filter((like) => like.user === user._id).length > 0;
+  // const isLiked =
+  //   user && post.likes.filter((like) => like.user === user._id).length > 0;
+  const isLiked = user && post?.likes?.some((like) => like.user === user._id);
 
-  const isSaved =
-    user && post.saves.filter((save) => save.user === user._id).length > 0;
+
+  // const isSaved =
+  //   user && post.saves.filter((save) => save.user === user._id).length > 0;
+
+  const isSaved = user && post?.saves?.some((save) => save.user === user._id);
+
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <Image
-          src={post.user.profilePicUrl}
+          // src={post.user.profilePicUrl}
+          src={post?.user?.profilePicUrl || "/default-profile.png"}
           className="rounded-full object-cover"
           height={50}
           width={50}
         />
         <div className="ml-4">
           <h1 className="text-lg md:text-xl font-semibold">{post.title}</h1>
-          <Link href={`/${post.user.username}`}
-             className="md:text-md hover:text-purple-900 text-gray-700">
-              {post.user.username}
-            
+          <Link 
+            href={`/${post.user?.username}`} 
+            className="md:text-md hover:text-purple-900 text-gray-700"
+          >
+            {post.user?.username || "Unknown User"}
           </Link>
         </div>
       </div>
       <div className="flex gap-2 md:gap-4">
         {user && (
           <>
-            {post.user._id !== user._id && (
+            {post.user?._id !== user._id && (
               <button
                 onClick={savePost}
                 className={`${
@@ -73,15 +80,15 @@ const PostHeader = ({ post, user, deletePost, likePost, savePost }) => {
                 </>
               )}
             </button>
-            {post.user._id === user._id && (
+            {post.user?._id === user._id && (
               <Link href={`/posts/edit/${post._id}`}>
-                <a className="bg-blue-100 text-blue-600 py-2 px-3 flex items-center rounded-lg font-medium">
+                 className="bg-blue-100 text-blue-600 py-2 px-3 flex items-center rounded-lg font-medium"
                   <PencilAltIcon className="h-5 w-5" />{' '}
                   <p className="hidden md:block ml-1">Edit</p>
-                </a>
+                
               </Link>
             )}
-            {(post.user._id === user._id || user.role === 'root') && (
+            {(post.user?._id === user._id || user.role === 'root') && (
               <button
                 onClick={() => setOpen(true)}
                 className="bg-red-100 text-red-600 py-2 px-3 flex items-center rounded-lg font-medium"
