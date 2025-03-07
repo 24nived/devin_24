@@ -1,3 +1,4 @@
+"use client";
 import Link from 'next/link';
 import { LoginIcon, PlusCircleIcon } from '@heroicons/react/outline';
 
@@ -8,12 +9,12 @@ const HeroBanner = ({ user }) => {
         <div className="flex-3 text-center md:text-left">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6 xl:w-5/6 2xl:w-3/4">
             {user
-              ? 'Share your projects with developers across the globe'
+              ? 'Share your projects with developers'
               : 'Discover creative websites and developers'}
           </h1>
           <p className="text-sm md:text-md lg:text-lg font-medium text-white mb-6 xl:w-5/6 2xl:w-3/4">
             {user
-              ? 'Got a project to showcase? Post it on Devin to get your creative work noticed by hundreds of developers, earn badges, and get promoted on our social handles.'
+              ? 'Got a project to showcase? Post it on Devin to get your creative work noticed by hundreds of developers and get promoted on our social handles.'
               : 'Create a free account today to interact with posts from developers across the globe. Open the gates to like, comment, follow, and chat.'}
           </p>
           <p className="text-gray-200 hidden md:block">

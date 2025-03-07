@@ -1,3 +1,264 @@
+// import axios from 'axios';
+// import Link from 'next/link';
+// import cookie from 'js-cookie';
+// import { format } from 'date-fns';
+// import { toast } from 'react-toastify';
+// import { useRouter } from 'next/router';
+// import { useState, useEffect } from 'react';
+// import {
+//   useQuery,
+//   useMutation,
+//   QueryClient,
+//   useQueryClient,
+// } from 'react-query';
+// import { dehydrate } from 'react-query/hydration';
+// import {
+//   ClockIcon,
+//   TagIcon,
+//   GlobeAltIcon,
+//   CodeIcon,
+//   HeartIcon,
+//   ChatIcon,
+// } from '@heroicons/react/outline';
+
+// import baseURL from '../../utils/baseURL';
+// import PostHeader from '../../components/post-page/PostHeader';
+// import PostCarousel from '../../components/post-page/PostCarousel';
+// import PostDetailsItem from '../../components/post-page/PostDetailsItem';
+// import PostDetailsLink from '../../components/post-page/PostDetailsLink';
+// import NewComment from '../../components/post-page/NewComment';
+// import Comment from '../../components/post-page/Comment';
+// import NotFound from '../../components/404';
+// import PostHead from '../../components/PostHead';
+// import DOMPurify from 'dompurify';
+
+// const getPost = async (id) => {
+//   const { data } = await axios.get(`${baseURL}/api/posts/${id}`);
+//   return data;
+// };
+
+// const PostPage = ({ user }) => {
+//   const router = useRouter();
+//   const { id } = router.query;
+
+//   const queryClient = useQueryClient();
+
+//   // const { data } = useQuery(['posts', id], () => getPost(id));
+//   const { data = {} } = useQuery(['posts', id], () => getPost(id));
+
+
+//   const { data: comments = [] } = useQuery(['comments', id], async () => {
+//     const { data } = await axios.get(`${baseURL}/api/comments/${id}`);
+//     return data || [];
+//   });
+  
+
+//   const mutation = useMutation(async () => {
+//     await axios.delete(`${baseURL}/api/posts/${id}`, {
+//       headers: {
+//         Authorization: cookie.get('token'),
+//       },
+//     });
+//   });
+
+//   const likeMutation = useMutation(
+//     async () => {
+//       const { data } = await axios.put(
+//         `${baseURL}/api/posts/like/${id}`,
+//         {},
+//         {
+//           headers: {
+//             Authorization: cookie.get('token'),
+//           },
+//         }
+//       );
+//       return data;
+//     },
+//     {
+//       onSuccess: (data) => {
+//         const old = queryClient.getQueryData(['posts', id]);
+//         queryClient.setQueryData(['posts', id], { ...old, likes: data.likes });
+//       },
+//     }
+//   );
+
+//   const saveMutation = useMutation(
+//     async () => {
+//       const { data } = await axios.put(
+//         `${baseURL}/api/posts/save/${id}`,
+//         {},
+//         {
+//           headers: {
+//             Authorization: cookie.get('token'),
+//           },
+//         }
+//       );
+//       return data;
+//     },
+//     {
+//       onSuccess: (data) => {
+//         const old = queryClient.getQueryData(['posts', id]);
+//         queryClient.setQueryData(['posts', id], { ...old, saves: data.saves });
+//       },
+//     }
+//   );
+
+//   const deletePost = async () => {
+//     try {
+//       await mutation.mutateAsync();
+//       toast.success('Post has been deleted successfully');
+//       router.push('/home');
+//     } catch (err) {
+//       toast.error(err.response?.data?.msg || 'Something went wrong');
+//     }
+//   };
+
+//   const [modalOpen, setModalOpen] = useState(false);
+
+//   useEffect(() => {
+//     if (data?.title) {
+//       document.title = `${data.title} on Devin`;
+//     }
+//   }, [data]);
+  
+
+//   if (!data) {
+//     return <NotFound />;
+//   }
+
+//   return (
+//     <>
+//       <PostHead post={data} />
+//       <div className="max-w-5xl px-4 py-8 md:px-12 md:py-12 mx-auto">
+//         <PostHeader
+//           post={data}
+//           user={user}
+//           deletePost={deletePost}
+//           likePost={() => likeMutation.mutate()}
+//           savePost={() => saveMutation.mutate()}
+//         />
+//         <div className="my-8">
+//           <PostCarousel images={data.images} title={data.title} />
+//         </div>
+//         <div className="flex flex-wrap md:flex-nowrap">
+//           <div className="w-full md:w-2/3 lg:w-3/4">
+//             <div
+//               className="w-full text-lg mb-6 md:mb-0 pr-4"
+//               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.description) }}
+//             ></div>
+//             <div className="mt-6">
+//             <h1 className="mb-4 text-lg text-purple-900 font-semibold">
+//             Comments ({comments ? comments.length : 0})
+//             </h1>
+//               {user && <NewComment queryClient={queryClient} id={data._id} />}
+//               {/* {comments.map((comment) => (
+//                 <Comment
+//                   key={comment._id}
+//                   comment={comment}
+//                   postId={data._id}
+//                   user={user}
+//                   queryClient={queryClient}
+//                 />
+//               ))} */}
+//               {comments && comments.length > 0 ? (
+//                  comments.map((comment) => (
+//                   <Comment
+//                     key={comment._id}
+//                     comment={comment}
+//                     postId={data._id}
+//                     user={user}
+//                     queryClient={queryClient}
+//                     />
+//                   ))
+//                 ) : (
+//                   <p className="text-gray-500">No comments yet.</p>
+//                 )}
+
+//             </div>
+//           </div>
+//           <div className="w-100 md:w-1/3 lg:w-1/4 w-full">
+//             <h3 className="text-lg font-semibold text-purple-900">
+//               Post Details
+//             </h3>
+//             <div className="grid grid-col-1 mt-4 space-y-2">
+//             <PostDetailsItem
+//               Icon={ClockIcon}
+//               detail={
+//                 data?.createdAt
+//                   ? format(new Date(data.createdAt), 'do MMM yyyy, hh:mm a')
+//                   : 'Unknown date'
+//               }
+//             />
+//               <div className="flex flex-wrap items-center border-b py-1">
+//                 <div className="w-5 mr-2">
+//                   <TagIcon className="h-5 w-5 text-purple-900" />
+//                 </div>
+//                 {/* <div className="flex-1 flex flex-wrap gap-2">
+//                   {data.techStack.map((tag, index) => (
+//                     <Link key={index} href={`/posts/tag/${tag}`}
+//                        className="bg-gray-100 hover:bg-purple-900 hover:text-white transition text-gray-800 text-sm font-semibold rounded-md px-2 py-1">
+//                         {tag}
+                      
+//                     </Link>
+//                   ))}
+//                 </div> */}
+
+//                 {data && data.techStack && data.techStack.length > 0 && (
+//                   <div className="flex-1 flex flex-wrap gap-2">
+//                     {data.techStack.map((tag, index) => (
+//                       <Link key={index} href={`/posts/tag/${tag}`} legacyBehavior>
+//                         <span>className="bg-gray-100 hover:bg-purple-900 hover:text-white transition text-gray-800 text-sm font-semibold rounded-md px-2 py-1"</span> 
+//                           {tag}
+                        
+//                       </Link>
+//                     ))}
+//                   </div>
+//                 )}
+
+//               </div>
+//               <PostDetailsLink Icon={GlobeAltIcon} detail={data.liveDemo} />
+//               {data.sourceCode && (
+//                 <PostDetailsLink Icon={CodeIcon} detail={data.sourceCode} />
+//               )}
+//               <PostDetailsItem
+//                 Icon={HeartIcon}
+//                 detail={`${(data?.likes || []).length} likes`}
+
+//                 isLikes
+//                 open={modalOpen}
+//                 setOpen={setModalOpen}
+//                 postId={data._id}
+//               />
+//               <PostDetailsItem
+//                 Icon={ChatIcon}
+//                 detail={`${comments.length} comments`}
+//               />
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export async function getServerSideProps(ctx) {
+//   const { id } = ctx.params;
+
+//   const queryClient = new QueryClient();
+//   await queryClient.prefetchQuery(['posts', id], () => getPost(id));
+//   await queryClient.prefetchQuery(['comments', id], async () => {
+//     const { data } = await axios.get(`${baseURL}/api/comments/${id}`);
+//     return data;
+//   });
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// }
+
+// export default PostPage;
+
 import axios from 'axios';
 import Link from 'next/link';
 import cookie from 'js-cookie';
@@ -43,15 +304,14 @@ const PostPage = ({ user }) => {
 
   const queryClient = useQueryClient();
 
-  // const { data } = useQuery(['posts', id], () => getPost(id));
-  const { data = {} } = useQuery(['posts', id], () => getPost(id));
-
+  const { data = {} } = useQuery(['posts', id], () => getPost(id), {
+    enabled: !!id,
+  });
 
   const { data: comments = [] } = useQuery(['comments', id], async () => {
     const { data } = await axios.get(`${baseURL}/api/comments/${id}`);
     return data || [];
-  });
-  
+  }, { enabled: !!id });
 
   const mutation = useMutation(async () => {
     await axios.delete(`${baseURL}/api/posts/${id}`, {
@@ -120,9 +380,8 @@ const PostPage = ({ user }) => {
       document.title = `${data.title} on Devin`;
     }
   }, [data]);
-  
 
-  if (!data) {
+  if (!data || !data._id) {
     return <NotFound />;
   }
 
@@ -147,74 +406,51 @@ const PostPage = ({ user }) => {
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.description) }}
             ></div>
             <div className="mt-6">
-            <h1 className="mb-4 text-lg text-purple-900 font-semibold">
-            Comments ({comments ? comments.length : 0})
-            </h1>
+              <h1 className="mb-4 text-lg text-purple-900 font-semibold">
+                Comments ({comments.length})
+              </h1>
               {user && <NewComment queryClient={queryClient} id={data._id} />}
-              {/* {comments.map((comment) => (
-                <Comment
-                  key={comment._id}
-                  comment={comment}
-                  postId={data._id}
-                  user={user}
-                  queryClient={queryClient}
-                />
-              ))} */}
-              {comments && comments.length > 0 ? (
-                 comments.map((comment) => (
+              {comments.length > 0 ? (
+                comments.map((comment) => (
                   <Comment
                     key={comment._id}
                     comment={comment}
                     postId={data._id}
                     user={user}
                     queryClient={queryClient}
-                    />
-                  ))
-                ) : (
-                  <p className="text-gray-500">No comments yet.</p>
-                )}
-
+                  />
+                ))
+              ) : (
+                <p className="text-gray-500">No comments yet.</p>
+              )}
             </div>
           </div>
-          <div className="w-100 md:w-1/3 lg:w-1/4 w-full">
-            <h3 className="text-lg font-semibold text-purple-900">
-              Post Details
-            </h3>
+          <div className="w-100 md:w-1/3 lg:w-1/4">
+            <h3 className="text-lg font-semibold text-purple-900">Post Details</h3>
             <div className="grid grid-col-1 mt-4 space-y-2">
-            <PostDetailsItem
-              Icon={ClockIcon}
-              detail={
-                data?.createdAt
-                  ? format(new Date(data.createdAt), 'do MMM yyyy, hh:mm a')
-                  : 'Unknown date'
-              }
-            />
+              <PostDetailsItem
+                Icon={ClockIcon}
+                detail={
+                  data?.createdAt
+                    ? format(new Date(data.createdAt), 'do MMM yyyy, hh:mm a')
+                    : 'Unknown date'
+                }
+              />
               <div className="flex flex-wrap items-center border-b py-1">
                 <div className="w-5 mr-2">
                   <TagIcon className="h-5 w-5 text-purple-900" />
                 </div>
-                {/* <div className="flex-1 flex flex-wrap gap-2">
-                  {data.techStack.map((tag, index) => (
-                    <Link key={index} href={`/posts/tag/${tag}`}
-                       className="bg-gray-100 hover:bg-purple-900 hover:text-white transition text-gray-800 text-sm font-semibold rounded-md px-2 py-1">
-                        {tag}
-                      
-                    </Link>
-                  ))}
-                </div> */}
-
-                {data && data.techStack && data.techStack.length > 0 && (
+                {data.techStack?.length > 0 && (
                   <div className="flex-1 flex flex-wrap gap-2">
                     {data.techStack.map((tag, index) => (
                       <Link key={index} href={`/posts/tag/${tag}`} legacyBehavior>
-                        <span>className="bg-gray-100 hover:bg-purple-900 hover:text-white transition text-gray-800 text-sm font-semibold rounded-md px-2 py-1"</span> 
+                        <a className="bg-gray-100 hover:bg-purple-900 hover:text-white transition text-gray-800 text-sm font-semibold rounded-md px-2 py-1">
                           {tag}
-                        
+                        </a>
                       </Link>
                     ))}
                   </div>
                 )}
-
               </div>
               <PostDetailsLink Icon={GlobeAltIcon} detail={data.liveDemo} />
               {data.sourceCode && (
@@ -223,16 +459,12 @@ const PostPage = ({ user }) => {
               <PostDetailsItem
                 Icon={HeartIcon}
                 detail={`${(data?.likes || []).length} likes`}
-
                 isLikes
                 open={modalOpen}
                 setOpen={setModalOpen}
                 postId={data._id}
               />
-              <PostDetailsItem
-                Icon={ChatIcon}
-                detail={`${comments.length} comments`}
-              />
+              <PostDetailsItem Icon={ChatIcon} detail={`${comments.length} comments`} />
             </div>
           </div>
         </div>
@@ -250,6 +482,7 @@ export async function getServerSideProps(ctx) {
     const { data } = await axios.get(`${baseURL}/api/comments/${id}`);
     return data;
   });
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
