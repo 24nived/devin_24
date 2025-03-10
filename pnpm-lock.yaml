@@ -1711,7 +1711,7 @@ packages:
       react-native:
         optional: true
 
-  react-quill@1.3.5:
+  react-quill@2.0.0:
     resolution: {integrity: sha512-/W/rNCW+6QpGz8yQ9tFK5Ka/h/No1RqrcOOvCIOR092OiKzRFlU2xbPEwiP3Wgy/Dx13pi1YhjReDMX/5uotJg==}
     engines: {node: '>= 0.8.x'}
     peerDependencies:

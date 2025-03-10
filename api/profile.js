@@ -24,15 +24,17 @@ router.get('/:username', async (req, res) => {
     }
 
     const profile = await Profile.findOne({ user: user._id }).populate('user');
-    const follow = await Follower.findOne({ user: user._id });
+    // const follow = await Follower.findOne({ user: user._id });
+    const follow = await Follower.findOne({ user: profile._id }) || { followers: [], following: [] };
+
     const posts = await Post.find({ user: user._id })
       .sort({ createdAt: -1 })
       .populate('user');
 
     res.status(200).json({
       profile,
-      followers: follow.followers,
-      following: follow.following,
+      followers: follow.followers || [],
+      following: follow.following || [],
       posts,
     });
   } catch (error) {
