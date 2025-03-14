@@ -1,10 +1,11 @@
 "use client";
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { LoginIcon, PlusCircleIcon } from '@heroicons/react/outline';
 
 const HeroBanner = ({ user }) => {
   return (
-    <div className="bg-gradient-to-br from-purple-600 via-purple-700 to-purple-200 py-10 px-4 md:px-0 md:py-8">
+    <div className="bg-gradient-to-br from-purple-500 via-purple-900 to-purple-900 py-10 px-4 md:px-0 md:py-8">
       <div className="container mx-auto flex justify-between items-center flex-wrap sm:flex-nowrap md:px-12">
         <div className="flex-3 text-center md:text-left">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6 xl:w-5/6 2xl:w-3/4">
@@ -17,7 +18,7 @@ const HeroBanner = ({ user }) => {
               ? 'Got a project to showcase? Post it on Devin to get your creative work noticed by hundreds of developers and get promoted on our social handles.'
               : 'Create a free account today to interact with posts from developers across the globe. Open the gates to like, comment, follow, and chat.'}
           </p>
-          <p className="text-gray-200 hidden md:block">
+          {/* <p className="text-gray-200 hidden md:block">
             Illustration by{' '}
             <a
               className="underline"
@@ -36,7 +37,7 @@ const HeroBanner = ({ user }) => {
             >
               Ouch!
             </a>
-          </p>
+          </p> */}
         </div>
         <img
           className="hidden md:block mx-auto mb-10 sm:mb-0 md:h-64 lg:h-72 2xl:h-80 3xl:h-96 w-auto flex-2"

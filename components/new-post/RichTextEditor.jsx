@@ -24,3 +24,4 @@ const RichTextEditor = ({ value, setValue }) => {
 
 export default RichTextEditor;
 
+

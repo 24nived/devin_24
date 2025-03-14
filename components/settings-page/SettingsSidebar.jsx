@@ -7,7 +7,7 @@ import {
 const subNavigation = [
   { name: 'User', icon: UserCircleIcon, id: 'user' },
   { name: 'Profile', icon: IdentificationIcon, id: 'profile' },
-  { name: 'Password', icon: KeyIcon, id: 'password' },
+ // { name: 'Password', icon: KeyIcon, id: 'password' },
 ];
 
 function classNames(...classes) {

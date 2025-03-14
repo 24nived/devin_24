@@ -6,7 +6,7 @@ function classNames(...classes) {
 
 const SettingsHeader = () => {
   return (
-    <Disclosure as="div" className="relative bg-purple-900 pb-32 overflow-hidden">
+    <Disclosure as="div" className="relative bg-purple-900  pb-32 overflow-hidden">
       {({ open }) => (
         <>
           <div

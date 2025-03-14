@@ -122,13 +122,28 @@ const NewPost = ({ user }) => {
               setValue={setSourceCode}
             />
           </div>
+          {/* <label
+            htmlFor="description"
+            className="block mr-auto text-md font-medium text-purple-900 mb-2"
+          >
+            Add some description <span className="text-red-400">*</span>
+          </label>
+          <RichTextEditor value={description} setValue={setDescription} /> */}
           <label
             htmlFor="description"
             className="block mr-auto text-md font-medium text-purple-900 mb-2"
           >
             Add some description <span className="text-red-400">*</span>
           </label>
-          <RichTextEditor value={description} setValue={setDescription} />
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={8}
+            className="bg-white p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring focus:ring-purple-300"
+            placeholder="Write something about your post..."
+            required
+          ></textarea>
           <ImageDropzone setImages={setImages} />
           {images.length > 0 && (
             <ThumbnailsDND images={images} setImages={setImages} />

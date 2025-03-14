@@ -1,7 +1,8 @@
 import axios from 'axios';
 import cookie from 'js-cookie';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+//import { toast } from 'react-toastify';
+import  Toast  from '../toast';
 import { useRouter } from 'next/router';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { useQuery, useMutation } from 'react-query';
@@ -11,6 +12,8 @@ import baseURL from '../../utils/baseURL';
 const UserSettings = ({ user }) => {
   const [name, setName] = useState(user.name);
   const [username, setUsername] = useState(user.username);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+
   const [profilePic, setProfilePic] = useState(null);
 
   const router = useRouter();
@@ -45,6 +48,21 @@ const UserSettings = ({ user }) => {
     });
   });
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formdata = new FormData();
+  //   formdata.append('name', name);
+  //   formdata.append('username', username);
+  //   formdata.append('profilePic', profilePic);
+
+  //   try {
+  //     await mutation.mutateAsync(formdata);
+  //     toast.success('User settings have been updated');
+  //     router.push('/home');
+  //   } catch (err) {
+  //     toast.error(err.response?.data?.msg || 'Please recheck your inputs');
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formdata = new FormData();
@@ -54,10 +72,10 @@ const UserSettings = ({ user }) => {
 
     try {
       await mutation.mutateAsync(formdata);
-      toast.success('User settings have been updated');
+      Toast('User settings have been updated', 'success'); // ✅ Call success toast
       router.push('/home');
     } catch (err) {
-      toast.error(err.response?.data?.msg || 'Please recheck your inputs');
+      Toast(err.response?.data?.msg || 'Please recheck your inputs', 'error'); // ❌ Call error toast
     }
   };
 
