@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import cookie from 'js-cookie';
 import { toast } from 'react-toastify';
+//import  Toast  from '../toast';
+import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { formatDistanceToNow } from 'date-fns';
 import {
@@ -16,6 +18,7 @@ import baseURL from '../../utils/baseURL';
 const Reply = ({ reply, user, queryClient, comment, postId }) => {
   const isLiked =
     user && reply.likes.filter((like) => like.user === user._id).length > 0;
+   // const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const replyMutation = useMutation(
     async () => {
@@ -32,6 +35,11 @@ const Reply = ({ reply, user, queryClient, comment, postId }) => {
         queryClient.setQueryData(['comments', postId], data);
         toast.success('Your reply has been deleted');
       },
+      // onSuccess: (data) => {
+      //   queryClient.setQueryData(['comments', postId], data);
+      //   setToast({ show: true, message: 'Your reply has been deleted', type: 'success' });
+      //   setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000); // Hide after 3s
+      // },
     }
   );
 
@@ -56,6 +64,7 @@ const Reply = ({ reply, user, queryClient, comment, postId }) => {
   );
 
   return (
+    
     <div className="flex mt-4 w-full items-start mb-1 md:w-5/6">
       <Link href={`/${reply.user.username}`}>
         <div className="w-100 mr-2 cursor-pointer">

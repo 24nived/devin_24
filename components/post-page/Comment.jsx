@@ -4,6 +4,7 @@ import cookie from 'js-cookie';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+//import  Toast  from '../toast';
 import { useMutation } from 'react-query';
 import { formatDistanceToNow } from 'date-fns';
 import {
@@ -21,6 +22,7 @@ import baseURL from '../../utils/baseURL';
 const Comment = ({ comment, user, postId, queryClient }) => {
   const isLiked =
     user && comment.likes.filter((like) => like.user === user._id).length > 0;
+  //  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const mutation = useMutation(
     async () => {
@@ -37,6 +39,11 @@ const Comment = ({ comment, user, postId, queryClient }) => {
         queryClient.setQueryData(['comments', postId], data);
         toast.success('Your comment has been deleted');
       },
+      // onSuccess: (data) => {
+      //   queryClient.setQueryData(['comments', postId], data);
+      //   setToast({ show: true, message: 'Your comment has been deleted', type: 'success' });
+      // }
+      
     }
   );
 
@@ -90,7 +97,7 @@ const Comment = ({ comment, user, postId, queryClient }) => {
   };
 
   return (
-    <>
+    
       <div className="flex w-full items-start mb-4 md:w-5/6">
         <Link href={`/${comment.user.username}`}>
           <div className="w-100 mr-2 cursor-pointer">
@@ -172,7 +179,6 @@ const Comment = ({ comment, user, postId, queryClient }) => {
           ))}
         </div>
       </div>
-    </>
   );
 };
 

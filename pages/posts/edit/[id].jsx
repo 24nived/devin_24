@@ -195,7 +195,7 @@
 import axios from 'axios';
 import cookie from 'js-cookie';
 import { useState, useEffect } from 'react';
-import  toast  from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { useQuery, QueryClient, useMutation } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -223,6 +223,7 @@ const getPost = async (id) => {
 const EditPostPage = ({ user }) => {
   const router = useRouter();
   const { id } = router.query;
+ // const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const { data } = useQuery(['posts', id], () => getPost(id), {
     enabled: !!id,
@@ -301,6 +302,24 @@ const EditPostPage = ({ user }) => {
     } catch (err) {
       toast.error(err.response?.data?.msg || 'Please recheck your inputs');
     }
+    // try {
+    //   await mutation.mutateAsync(formdata);
+    //   setToast({
+    //     show: true,
+    //     message: 'Your post has been successfully updated',
+    //     type: 'success'
+    //   });
+    //   router.push(`/posts/${id}`);
+    // } catch (err) {
+    //   setToast({
+    //     show: true,
+    //     message: err.response?.data?.msg || 'Please recheck your inputs',
+    //     type: 'error'
+    //   });
+    //   // Optional: Auto hide after 3 seconds
+    //   setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+    // }
+    
   };
 
   return (
@@ -394,6 +413,7 @@ const EditPostPage = ({ user }) => {
         </form>
       </div>
     </div>
+  
   );
 };
 

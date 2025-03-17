@@ -2,6 +2,7 @@ import axios from 'axios';
 import cookie from 'js-cookie';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+//import  Toast  from '../toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { GoBrowser } from 'react-icons/go';
 import {
@@ -16,6 +17,7 @@ import {
 import baseURL from '../../utils/baseURL';
 
 const UserSettings = ({ profile }) => {
+ // const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [bio, setBio] = useState(profile.bio);
   const [techStack, setTechStack] = useState(() =>
     profile.techStack.join(', ')
@@ -65,10 +67,25 @@ const UserSettings = ({ profile }) => {
       onError: () => {
         toast.error(err.response?.data?.msg || 'Please recheck your inputs');
       },
-    }
+
+      // onSuccess: (data) => {
+      //   queryClient.setQueryData(['profile'], data); // ✅ Set profile data in cache
+      //   setToast({ show: true, message: 'Updated profile successfully', type: 'success' }); // ✅ Show success toast
+      
+      //   // Auto-hide toast after 3 seconds
+      //   setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+      // },
+      // onError: (err) => {
+      //   setToast({ show: true, message: err.response?.data?.msg || 'Please recheck your inputs', type: 'error' }); // ✅ Show error toast
+      
+      //   // Auto-hide toast after 3 seconds
+      //   setTimeout(() => setToast({ show: false, message: '', type: 'error' }), 3000);
+      }
+   // }
   );
 
   return (
+    
     <form
       onSubmit={(e) => {
         e.preventDefault();

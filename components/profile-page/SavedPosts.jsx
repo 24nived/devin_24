@@ -20,13 +20,21 @@ const SavedPosts = ({ user }) => {
     return <p>Loading...</p>;
   }
 
-  if (data.length === 0) {
+  // if (data.length === 0) {
+  //   return (
+  //     <p className="text-lg mt-2 text-purple-900">
+  //       You have not saved any posts yet
+  //     </p>
+  //   );
+  // }
+  if (!data?.length) {
     return (
       <p className="text-lg mt-2 text-purple-900">
         You have not saved any posts yet
       </p>
     );
   }
+  
 
   return (
     <div className="grid gap-x-5 gap-y-7 place-items-start grid-cols-auto-fill">

@@ -153,11 +153,18 @@ const NotificationItem = ({ notification, index, length }) => {
               </Link>
               <div className="min-w-0 w-full flex justify-between py-1.5">
                 <div className="text-md text-gray-500 md:ml-2 ml-0">
-                  <Link href={`/${notification.user.username}`}>
+                  {/* <Link href={`/${notification.user.username}`}>
                     <a className="font-medium text-gray-900 hover:text-purple-900">
                       {notification.user.username}
                     </a>
-                  </Link>{' '}
+                  </Link>{' '} */}
+                  <Link 
+                  href={`/${notification.user.username}`} 
+                  className="font-medium text-gray-900 hover:text-purple-900"
+                >
+                  {notification.user.username}
+                </Link>
+
                   liked your post on{' '}
                   <Link href={`/posts/${notification.post._id}`}
                      className="hover:text-purple-900 cursor-pointer">

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import cookie from 'js-cookie';
 import { useState } from 'react';
-//import { toast } from 'react-toastify';
-import  Toast  from '../toast';
+import { toast } from 'react-toastify';
+//import  Toast  from '../toast';
 import { useRouter } from 'next/router';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { useQuery, useMutation } from 'react-query';
@@ -12,7 +12,7 @@ import baseURL from '../../utils/baseURL';
 const UserSettings = ({ user }) => {
   const [name, setName] = useState(user.name);
   const [username, setUsername] = useState(user.username);
-  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  //const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const [profilePic, setProfilePic] = useState(null);
 
@@ -72,10 +72,10 @@ const UserSettings = ({ user }) => {
 
     try {
       await mutation.mutateAsync(formdata);
-      Toast('User settings have been updated', 'success'); // ✅ Call success toast
+      toast.success('User settings have been updated');
       router.push('/home');
     } catch (err) {
-      Toast(err.response?.data?.msg || 'Please recheck your inputs', 'error'); // ❌ Call error toast
+      toast.error(err.response?.data?.msg || 'Please recheck your inputs');
     }
   };
 

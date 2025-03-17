@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+//import  Toast  from 'components/toast';
 import { GoBrowser } from 'react-icons/go';
 import {
   AiFillGithub,
@@ -56,6 +57,7 @@ const Onboarding = () => {
   };
 
   return (
+    
     <div className="p-6">
       <div>
         <div className="md:grid md:grid-cols-3 md:gap-6">

@@ -116,7 +116,7 @@ router.get('/feed', auth, async (req, res) => {
 router.get('/saves', auth, async (req, res) => {
   try {
     const saves = await Post.find({
-      'saves.user': mongoose.Types.ObjectId(req.userId),
+      'saves.user': new mongoose.Types.ObjectId(req.userId),
     }).populate('user');
     res.status(200).json(saves);
   } catch (error) {
@@ -203,14 +203,21 @@ router.delete('/:postId', auth, async (req, res) => {
       return res.status(404).json({ msg: 'Post not found' });
     }
     const user = await User.findById(req.userId);
+    // if (post.user.toString() === req.userId || user.role === 'root') {
+    //   await post.remove();
+    //   res.status(200).json({ msg: 'Post deleted' });
+    // } else {
+    //   res
+    //     .status(401)
+    //     .json({ msg: 'You are not authorized to delete this post' });
+    // }
     if (post.user.toString() === req.userId || user.role === 'root') {
-      await post.remove();
+      await Post.findByIdAndDelete(post._id);
       res.status(200).json({ msg: 'Post deleted' });
     } else {
-      res
-        .status(401)
-        .json({ msg: 'You are not authorized to delete this post' });
+      res.status(401).json({ msg: 'You are not authorized to delete this post' });
     }
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });
