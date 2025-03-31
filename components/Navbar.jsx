@@ -75,7 +75,7 @@ const Navbar = ({ user, currentPath }) => {
               {user ? (
                 <>
                   <div className="hidden lg:ml-4 lg:flex lg:items-center">
-                    {/* <Link href="/messages">
+                    <Link href="/messages">
                       <button className="flex-shrink-0 relative bg-white p-1 mr-2 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-700">
                         <span className="sr-only">View messages</span>
                         <ChatAlt2Icon className="h-6 w-6" aria-hidden="true" />
@@ -83,7 +83,7 @@ const Navbar = ({ user, currentPath }) => {
                           <div className="absolute top-1 right-2 bg-purple-900 h-2 w-2 rounded-full"></div>
                         )}
                       </button>
-                    </Link> */}
+                    </Link>
                     <Link href="/notifications">
                       <button className="flex-shrink-0 relative bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-700">
                         <span className="sr-only">View notifications</span>

@@ -28,7 +28,8 @@ const FeedPage = ({ user }) => {
       }
     );
 
-  if (data.pages[0].posts.length === 0) {
+  //if (data.pages[0].posts.length === 0) {
+    if (!data || !data.pages || data.pages.length === 0 || data.pages[0].posts.length === 0) {
     return (
       <div className="container mx-auto px-6 py-8 md:px-12 md:py-10">
         <Recommendations user={user} />

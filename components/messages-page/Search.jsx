@@ -35,7 +35,7 @@ const Search = ({ chats, setChats }) => {
 
   const addChat = (user) => {
     const alreadyInChat =
-      chats.length > 0 &&
+      chats?.length > 0 &&
       chats.filter((chat) => chat.messagesWith === user._id).length > 0;
 
     if (alreadyInChat) {
@@ -48,7 +48,8 @@ const Search = ({ chats, setChats }) => {
         lastMessage: '',
         date: Date.now(),
       };
-      setChats((prevState) => [newChat, ...prevState]);
+      //setChats((prevState) => [newChat, ...prevState]);
+      setChats((prevState) => [...(prevState || []), newChat]);
       router.push(`/messages?chat=${user._id}`);
     }
     setSearchText('');

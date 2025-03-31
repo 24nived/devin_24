@@ -89,6 +89,11 @@ router.get('/feed', auth, async (req, res) => {
       '-followers'
     );
 
+    if (!user) {
+      return res.status(404).json({ msg: 'Follower list not found for this user' });
+   }
+   
+
     const followingUsers = user.following.map((following) => following.user);
 
     const total = await Post.countDocuments({ user: { $in: followingUsers } });

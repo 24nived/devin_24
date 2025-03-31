@@ -13,16 +13,30 @@ router.get('/', auth, async (req, res) => {
       'chats.messagesWith'
     );
 
-    const chatsToSend =
-      user.chats.length > 0
-        ? user.chats.map((chat) => ({
-            messagesWith: chat.messagesWith._id,
-            name: chat.messagesWith.name,
-            profilePicUrl: chat.messagesWith.profilePicUrl,
-            lastMessage: chat.messages[chat.messages.length - 1].message,
-            date: chat.messages[chat.messages.length - 1].date,
-          }))
-        : [];
+    // Handle case where the user has no chats
+    if (!user || !user.chats) {
+      return res.status(200).json([]); // Return empty array instead of throwing an error
+    }
+
+    // const chatsToSend =
+    //   user.chats.length > 0
+    //     ? user.chats.map((chat) => ({
+    //         messagesWith: chat.messagesWith._id,
+    //         name: chat.messagesWith.name,
+    //         profilePicUrl: chat.messagesWith.profilePicUrl,
+    //         lastMessage: chat.messages[chat.messages.length - 1].message,
+    //         date: chat.messages[chat.messages.length - 1].date,
+    //       }))
+    //     : [];
+    const chatsToSend = user.chats
+    .filter((chat) => chat.messagesWith) // Filter out invalid references
+    .map((chat) => ({
+      messagesWith: chat.messagesWith._id,
+      name: chat.messagesWith.name,
+      profilePicUrl: chat.messagesWith.profilePicUrl,
+      lastMessage: chat.messages[chat.messages.length - 1]?.message || "",
+      date: chat.messages[chat.messages.length - 1]?.date || new Date(),
+    }));
 
     res.status(200).json(chatsToSend);
   } catch (error) {
