@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon server.js",
+    "install": "npm install --force",
     "build": "next build",
     "start": "NODE_ENV=production node server.js"
   },
